@@ -164,15 +164,14 @@ function initColor(parent, type, mtl) {
 }
 
 // Add lights
-var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
-hemiLight.position.set(0, 50, 0);
+var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
+hemiLight.position.set(0, 20, 0);
 // Add hemisphere light to scene   
 scene.add(hemiLight);
 
-var dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
+var dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
 dirLight.position.set(-8, 12, 8);
 dirLight.castShadow = false;
-dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
 // Add directional Light to scene    
 scene.add(dirLight);
 
@@ -196,7 +195,7 @@ controls.enableDamping = true;
 controls.enablePan = false;
 controls.dampingFactor = 0.1;
 controls.autoRotate = true; 
-controls.autoRotateSpeed = 1; 
+controls.autoRotateSpeed = 2; 
 
 function animate() {
   controls.update();
