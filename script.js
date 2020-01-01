@@ -5,23 +5,19 @@ var theModel;
 const MODEL_PATH = "lighthouse.glb";
 
 var houseColor = {
-  houseRed: ['E07878','E0A478','E0D878','85E078','78D5E0','7889E0','BE78E0'],
-  placeholder: ['']
-}
-
-var houseBase = {
+  houseRed: ['e74c3c','e67e22','f1c40f','2ecc71','1abc9c','3498db','9b59b6','34495e'],
   houseGrey: ['EEEEEE'],
   window: ['E3F9FF']
 }
 
 var islandColor = {
-  grass: ['CD6C05','CDC005','70CD05','05CDBE'],
-  ground: ['D89247','1C7F5E','234A96','70185D']
+  grass: ['b33939','218c74','227093','474787','84817a'],
+  ground: ['cd6133','33d9b2','34ace0','706fd3','d1ccc0']
 }
 
 var ladderColor = {
-  rope: ['2A2E12','BFC3C6'],
-  wood: ['59514D','82320A']
+  rope: ['341404','BFC3C6'],
+  wood: ['A18272','82320A']
 }
 
 var island = ['grass', 'ground'];
@@ -51,6 +47,7 @@ document.body.appendChild(renderer.domElement);
 var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = cameraFar;
 camera.position.x = 0;
+
 
 // Initial material
 const INITIAL_MTL = new THREE.MeshPhongMaterial({ color: 0xf1f1f1, shininess: 10 });
@@ -97,17 +94,20 @@ loader.load(MODEL_PATH, function (gltf) {
   // Remove the loader
   LOADER.remove();
 
-  colorIsland();
-  colorHouse();
-  colorHouseBase();
-  colorLadder();
+  colorAll();
 
 }, undefined, function (error) {
   console.error(error);
 });
 
+function colorAll() {
+  colorIsland();
+  colorHouse();
+  colorLadder();
+}
+
 function colorIsland() {
-  var randomNum = Math.floor(Math.random()*island[0].length)
+  var randomNum = Math.floor(Math.random()*(islandColor.grass.length))
   for (i = 0; i < island.length; i++) {
     var partColorGroup = islandColor[island[i]];
     var randomColor = partColorGroup[randomNum];
@@ -115,21 +115,32 @@ function colorIsland() {
         color: parseInt('0x' + randomColor),
         shininess: 10});
         setMaterial(theModel, island[i], new_mtl);
+    
   }
 }
 
 function colorHouse() {  
-    var randomNum = Math.floor(Math.random()*house[0].length); //houseRed
+    var randomNum = Math.floor(Math.random()*(houseColor.houseRed.length)); //houseRed
     var partColorGroup = houseColor[house[0]];
     var randomColor = partColorGroup[randomNum];
     new_mtl = new THREE.MeshPhongMaterial({
         color: parseInt('0x' + randomColor),
         shininess: 10});
         setMaterial(theModel, house[0], new_mtl);
+    
+      
+    new_mtl = new THREE.MeshPhongMaterial({
+        color: parseInt('0x' + houseColor[house[1]]), // houseGrey
+        shininess: 10});
+        setMaterial(theModel, house[1], new_mtl);
+    new_mtl = new THREE.MeshPhongMaterial({
+        color: parseInt('0x' + houseColor[house[2]]), // window
+        shininess: 10});
+        setMaterial(theModel, house[2], new_mtl);
 }
 
 function colorLadder() {
-  var randomNum = Math.floor(Math.random()*ladder[0].length)
+  var randomNum = Math.floor(Math.random()*(ladderColor.rope.length))
   for (i = 0; i < ladder.length; i++) {
     var partColorGroup = ladderColor[ladder[i]];
     var randomColor = partColorGroup[randomNum];
@@ -138,18 +149,6 @@ function colorLadder() {
         shininess: 10});
         setMaterial(theModel, ladder[i], new_mtl);
   }
-}
-console.log(houseBase[house[1]]);
-
-function colorHouseBase() {
-    new_mtl = new THREE.MeshPhongMaterial({
-        color: parseInt('0x' + houseBase[house[1]]), // houseGrey
-        shininess: 10});
-        setMaterial(theModel, house[1], new_mtl);
-    new_mtl = new THREE.MeshPhongMaterial({
-        color: parseInt('0x' + houseBase[house[2]]), // window
-        shininess: 10});
-        setMaterial(theModel, house[2], new_mtl);
 }
 
 // Function - Add default textures to the models
@@ -197,10 +196,9 @@ controls.enableDamping = true;
 controls.enablePan = false;
 controls.dampingFactor = 0.1;
 controls.autoRotate = true; 
-controls.autoRotateSpeed = 0.8; 
+controls.autoRotateSpeed = 1; 
 
 function animate() {
-
   controls.update();
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
@@ -211,8 +209,12 @@ function animate() {
     camera.updateProjectionMatrix();
   }
 }
-
 animate();
+
+function rotateUp() {
+  camera.position.y += 20* Math.PI/180
+}
+rotateUp();
 
 // Function - New resizing method
 function resizeRendererToDisplaySize(renderer) {
@@ -242,19 +244,6 @@ function setMaterial(parent, type, mtl) {
 
 document.body.onkeyup = function(e){
     if(e.keyCode == 32){
-        colorIsland();
-  colorHouse();
-  colorHouseBase();
-  colorLadder();
+      colorAll();
     }
 }
-
-
-  // for (i = 0; i < parts.length; i++) {
-  //   var partColorGroup = colorGroup[parts[i]];
-  //   var randomColor = partColorGroup[Math.floor(Math.random()*partColorGroup.length)];
-  //   new_mtl = new THREE.MeshPhongMaterial({
-  //       color: parseInt('0x' + randomColor),
-  //       shininess: 10});
-  //       setMaterial(theModel, parts[i], new_mtl);
-  // }
