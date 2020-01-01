@@ -11,8 +11,8 @@ var houseColor = {
 }
 
 var islandColor = {
-  grass: ['b33939','218c74','227093','474787','84817a'],
-  ground: ['cd6133','33d9b2','34ace0','706fd3','d1ccc0']
+  grass: ['8cc058','c29896','90afd6','ffd06e'],
+  ground: ['f0d7cf','893770','3A4F8D','a74837']
 }
 
 var ladderColor = {
